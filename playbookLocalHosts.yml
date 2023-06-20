@@ -1,0 +1,22 @@
+- name: "Greeting"
+  hosts: target,controllers
+  tasks:
+    - name: "Print hello"
+      command: "echo Hello world!"
+
+- name: "Start nginx"
+  hosts: target
+  become: true
+  become_method: sudo
+  ansible_sudo_pass: osboxes.org
+
+
+  tasks:
+    - name: "Update packages"
+      command: "apt update"
+
+    - name: "Install nginx"
+      command: "apt install nginx"
+
+    - name: "Start "
+      command: "systemctl start nginx"
