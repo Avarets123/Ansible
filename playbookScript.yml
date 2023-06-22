@@ -1,0 +1,5 @@
+- name: Script
+  hosts: all
+  tasks:
+    - name: Run local script on remote server
+      script: /some/local/dir/script.sh -arg1 -arg2
