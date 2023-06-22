@@ -1,0 +1,16 @@
+- name: Start services
+  hosts: all
+  become: true
+  tasks:
+    - name: Start db service
+      service:
+        name: postgresql
+        state: started
+    - name: Start httpd service
+      service:
+        name: httpd
+        state: started
+    - name: Start nginx service
+      service:
+        name: nginx
+        state: started
