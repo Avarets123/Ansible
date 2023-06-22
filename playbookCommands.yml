@@ -1,0 +1,15 @@
+---
+- name: Commands
+  hosts: all
+  tasks:
+    - name: Execute command "date"
+      command: date
+    - name: Display resolv.conf contents
+      command: cat /etc/resolve.conf
+    - name: Display resolv.conf contents
+      command: cat resolv.conf chdir=/etc
+    - name: Create directory
+      command: mkdir /folder creates=/folder
+
+    - name: Copy file from source to destination
+      copy: src=/source_file dest=/destination
