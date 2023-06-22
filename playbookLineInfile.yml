@@ -1,0 +1,13 @@
+- name: Line in file module
+  hosts: all
+  become: true
+  tasks:
+    - name: touch file
+      command: touch /etc/test2.txt
+
+    - lineinfile:
+        path: /etc/test2.txt
+        line: "have a nice day"
+
+    # - name: "by script"
+    #   command: echo 'success' >> /etc/test2.txt
