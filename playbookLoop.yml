@@ -1,0 +1,17 @@
+- name: Install web
+  hosts: all
+  vars:
+    packages:
+      - name: nginx
+        required: true
+      - name: mysql
+        required: true
+      - name: httpd
+        required: true
+  tasks:
+    - name: Install "{{ item.name }} on Ubuntu"
+      apt:
+        name: "{{ item.name }}"
+        state: present
+      when: item.required == true
+      loop: "{{ packages }}"
