@@ -1,0 +1,14 @@
+- name: Start services
+  hosts: all
+  tasks:
+    - name: start mysql
+      service:
+        name: mysqld
+        state: started
+      when: ansible_host == "127.0.0.3"
+    - name: start apache
+      service:
+        name: httpd
+        state: started
+      when: ansible_host == "127.0.0.1" or
+        ansible_host == "127.0.0.2"
