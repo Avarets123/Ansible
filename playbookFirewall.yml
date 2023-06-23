@@ -1,0 +1,21 @@
+- name: Set firewall configurations
+  hosts: linux
+  tasks:
+    - firewalld:
+        service: https
+        permanent: true
+        state: enable
+    - firewalld:
+        port: "{{ http_port }}/tcp"
+        permanent: true
+        state: disabled
+    - firewalld:
+        port: "{{ snmp_port }}/udp"
+        permanent: true
+        state: disabled
+    - firewalld:
+        port: "{{inner_ip_range}}/24"
+        Zone: internal
+        state: enabled
+  vars_files:
+    - variables-firewall.yml
