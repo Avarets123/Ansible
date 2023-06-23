@@ -1,0 +1,6 @@
+- name: Set firewall configurations
+  hosts: all
+  vars_filtes:
+    - vars.yml
+  tasks:
+    - include: playbookTasks.yml
