@@ -1,0 +1,24 @@
+- name: Test catching error
+  hosts: controller
+  tasks:
+    - name: Test block
+      block:
+        - name: Create user
+          user:
+            name: newUser
+            state: present
+          register: err
+        - name: Install curl
+          apt:
+            name: curl
+            update_cache: yes
+          register: err
+      become: true
+      rescue:
+        - name: Print error
+          debug:
+            var: err
+      always:
+        - name: Reboot
+          debug:
+            msg: Rebooooooooot
