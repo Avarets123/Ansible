@@ -13,6 +13,10 @@
             name: curl
             update_cache: yes
           register: err
+        - name: Failing
+          command: echo "FAILED"
+          register: result
+          failed_when: "'FAILED' in result.stdout"
       become: true
       rescue:
         - name: Print error
