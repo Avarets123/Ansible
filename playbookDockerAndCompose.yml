@@ -1,22 +1,28 @@
 - name: Configurate docker and docker-compose
-  hosts: controllers
+  hosts: linux
   become: yes
   tasks:
-    # - name: aptitude
-    #   apt:
-    #     name: "aptitude"
-    #     state: latest
-    #     update_cache: yes
+    - name: Add universe repository
+      apt_repository:
+        repo: "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe"
+        state: present
+
+    - name: aptitude
+      apt:
+        name: "aptitude"
+        state: latest
+        update_cache: yes
+
     - name: install required packages
       apt:
         pkg:
-          # - apt-transport-https
+          - apt-transport-https
           - ca-certificates
           - curl
           - software-properties-common
-          # - python3-pip
-          # - virtualenv
-          # - python3-setuptools
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
         state: latest
         update_cache: true
 
@@ -29,17 +35,35 @@
       apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu focal stable
         state: present
-    - name: Restart
-      reboot:
-        post_reboot_delay: 0
+
     - name: Update apt and install docker-ce
       apt:
         name: docker-ce
         state: latest
         update_cache: true
+
+    - name: Check install docker
+      service:
+        name: docker
+        state: restarted
+        enabled: true
+
+    - name: Get latest docker-compose version
+      uri:
+        url: "https://api.github.com/repos/docker/compose/releases/latest"
+        method: GET
+        body_format: json
+      register: data
+
     - name: install docker-compose
-      remote_user: osboxes
       get_url:
-        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        url: https://github.com/docker/compose/releases/download/{{data.json.tag_name}}/docker-compose-Linux-x86_64
         dest: /usr/local/bin/docker-compose
         mode: "u+x,g+x"
+
+    - name: permissions
+      block:
+        - user:
+            name: "{{ ansible_user }}"
+            groups: docker
+            append: yes
